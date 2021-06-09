@@ -3,8 +3,6 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const port = process.env.PORT || 4000;
-const app = express();
-
 const typeDefs = gql`
   type Query {
     hello: String
@@ -16,9 +14,16 @@ const resolvers = {
     hello: () => 'hello graph ql'
   }
 };
+const app = express();
 
-app.get('/', (req, res) => res.send('react native 1'));
+const server = new ApolloServer({ typeDefs, resolvers });
 
-app.listen(port, () =>
-  console.log(`Server running at http://localhost:${port}`)
+server.applyMiddleware({ app, path: '/api' });
+
+// app.get('/', (req, res) => res.send('react native 1'));
+
+app.listen({ port }, () =>
+  console.log(
+    `graphql server running at http://localhost:${port}${server.graphqlPath}`
+  )
 );
