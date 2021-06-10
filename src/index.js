@@ -20,6 +20,13 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 server.applyMiddleware({ app, path: '/api' });
 
+// mock data
+let notes = [
+    {id: '1', content: 'First note about graphql', author: 'Michael Scott'},
+    {id: '2', content: 'I need it ASAP as soon as possible', author: 'Michael Scott'},
+    {id: '3', content: 'Worlds greatest boss', author: 'Michael Scott'},
+];
+
 // app.get('/', (req, res) => res.send('react native 1'));
 
 app.listen({ port }, () =>
