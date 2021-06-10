@@ -6,12 +6,19 @@ const port = process.env.PORT || 4000;
 const typeDefs = gql`
   type Query {
     hello: String
+    notes: [Note!]!
+  },
+  type Note {
+      id: ID!
+      content: String!
+      author: String!
   }
 `;
 
 const resolvers = {
   Query: {
-    hello: () => 'hello graph ql'
+    hello: () => 'hello graph ql',
+    notes: () => notes
   }
 };
 const app = express();
