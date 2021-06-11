@@ -9,17 +9,6 @@ const db = require('./db');
 const { ApolloServer } = require('apollo-server-express');
 const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
-
-// mock data
-let notes = [
-  { id: '1', content: 'First note about graphql', author: 'Michael Scott' },
-  {
-    id: '2',
-    content: 'I need it ASAP as soon as possible',
-    author: 'Michael Scott'
-  },
-  { id: '3', content: 'Worlds greatest boss', author: 'Michael Scott' }
-];
 const app = express();
 
 const server = new ApolloServer({
