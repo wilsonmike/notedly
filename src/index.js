@@ -1,6 +1,7 @@
 // index.js
 // This is the main entry point of our application
 const express = require('express');
+const models = require('./models');
 require('dotenv').config();
 const db = require('./db');
 const { ApolloServer, gql } = require('apollo-server-express');
@@ -25,20 +26,19 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     hello: () => 'hello graph ql',
-    notes: () => notes,
+    notes: async () => {
+      return await models.Note.find();
+    },
     note: (parent, args) => {
       return notes.find(note => note.id === args.id);
     }
   },
   Mutation: {
-    newNote: (parent, args) => {
-      let noteValue = {
-        id: String(notes.length + 1),
+    newNote: async (parent, args) => {
+      return await models.Note.create({
         content: args.content,
         author: 'Adam Scott'
-      };
-      notes.push(noteValue);
-      return noteValue;
+      });
     }
   }
 };
