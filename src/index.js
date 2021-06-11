@@ -3,31 +3,12 @@
 const express = require('express');
 const models = require('./models');
 const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
 require('dotenv').config();
 const db = require('./db');
 const { ApolloServer } = require('apollo-server-express');
 const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
-
-const resolvers = {
-  Query: {
-    hello: () => 'hello graph ql',
-    notes: async () => {
-      return await models.Note.find();
-    },
-    note: async (parent, args) => {
-      return await models.Note.findById(args.id);
-    }
-  },
-  Mutation: {
-    newNote: async (parent, args) => {
-      return await models.Note.create({
-        content: args.content,
-        author: 'Adam Scott'
-      });
-    }
-  }
-};
 
 // mock data
 let notes = [
@@ -41,7 +22,13 @@ let notes = [
 ];
 const app = express();
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => {
+    return { models };
+  }
+});
 
 server.applyMiddleware({ app, path: '/api' });
 
